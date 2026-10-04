@@ -9,15 +9,15 @@ const server = http.createServer(async (req, res) => {
 
   const { method, resource, args } = getCommand();
 
-  if (req.url.startsWith("/productos") && req.method === "GET") {
+  if (req.url.startsWith("/products") && req.method === "GET") {
     const id = req.url.split("/")[2];
-    const data = id ? await handleGet(`productos/${id}`) : await handleGet("productos");
+    const data = id ? await handleGet(`products/${id}`) : await handleGet("products");
     res.writeHead(200);
     res.end(JSON.stringify(data));
     return;
   }
 
-  if (req.url === "/productos" && req.method === "POST") {
+  if (req.url === "/products" && req.method === "POST") {
     let body = "";
     req.on("data", chunk => {
       body += chunk.toString();
@@ -31,9 +31,9 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (req.url.startsWith("/productos/") && req.method === "DELETE") {
+  if (req.url.startsWith("/products/") && req.method === "DELETE") {
     const id = req.url.split("/")[2];
-    const data = await handleDelete(`productos/${id}`);
+    const data = await handleDelete(`products/${id}`);
     res.writeHead(200);
     res.end(JSON.stringify(data));
     return;
