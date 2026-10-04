@@ -1,0 +1,11 @@
+{
+  "name": "preentrega-talento-tech",
+  "version": "1.0.0",
+  "description": "Servidor Node para preentrega",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "Edgar",
+  "license": "ISC"
+}
