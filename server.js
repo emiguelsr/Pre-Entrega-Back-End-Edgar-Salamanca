@@ -9,6 +9,36 @@ const server = http.createServer(async (req, res) => {
 
   const { method, resource, args } = getCommand();
 
+  if (req.url.startsWith("/productos") && req.method === "GET") {
+    const id = req.url.split("/")[2];
+    const data = id ? await handleGet(`productos/${id}`) : await handleGet("productos");
+    res.writeHead(200);
+    res.end(JSON.stringify(data));
+    return;
+  }
+
+  if (req.url === "/productos" && req.method === "POST") {
+    let body = "";
+    req.on("data", chunk => {
+      body += chunk.toString();
+    });
+    req.on("end", async () => {
+      const { title, price, category } = JSON.parse(body);
+      const data = await handlePost([title, price, category]);
+      res.writeHead(201);
+      res.end(JSON.stringify(data));
+    });
+    return;
+  }
+
+  if (req.url.startsWith("/productos/") && req.method === "DELETE") {
+    const id = req.url.split("/")[2];
+    const data = await handleDelete(`productos/${id}`);
+    res.writeHead(200);
+    res.end(JSON.stringify(data));
+    return;
+  }
+
   if (method === "GET") {
     const data = await handleGet(resource);
     res.writeHead(200);
@@ -31,7 +61,7 @@ const server = http.createServer(async (req, res) => {
   }
 
   res.writeHead(400);
-  res.end(JSON.stringify({ error: "Comando no válido" }));
+  res.end(JSON.stringify({ error: "Comando o ruta no válida" }));
 });
 
 server.listen(PORT);
